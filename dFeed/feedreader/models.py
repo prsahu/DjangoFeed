@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.utils import timezone
+import datetime
 
 class OptionsManager(models.Manager):
     def get_options(self):
@@ -108,6 +109,9 @@ class Feed(models.Model):
             from feedreader.utils import poll_feed
 
             poll_feed(self)
+
+    def was_published_recently(self):
+        return self.published_time.date() >= timezone.now() - datetime.timedelta(days=1)
 
 
 class EntryManager(models.Manager):
